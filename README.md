@@ -247,5 +247,9 @@ This repo includes [`render.yaml`](render.yaml) at the **repository root**. Rend
    - **`VITE_API_URL`** (on service `arali-web`): set to your **API** URL, e.g. `https://arali-api.onrender.com` (no trailing slash). This is baked into the static build at build time.
 4. If the static site build ran **before** you had the API URL, open the **`arali-web`** service → **Environment** → set `VITE_API_URL` → **Manual Deploy → Clear build cache & deploy** so Vite rebuilds with the correct API base.
 
+### Static site build failed (`arali-web`)
+
+If the API deploys but the static site fails, open **`arali-web` → Logs** and check the build output. A common cause is **`vite: not found`** or missing modules: Render installs with `NODE_ENV=production`, which skips `devDependencies` where Vite lives. The [`render.yaml`](render.yaml) `buildCommand` uses `NPM_CONFIG_PRODUCTION=false npm install` so dev tools are installed before `npm run build`.
+
 **Note:** Free web services **sleep** after idle time; the first request after sleep is slow, and **in-memory data resets** when the instance restarts.
 
