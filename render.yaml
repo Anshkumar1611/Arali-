@@ -1,0 +1,35 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# After deploy: set CORS_ORIGIN (API) and VITE_API_URL (static) to the real
+# https://*.onrender.com URLs shown in the Render Dashboard (see README).
+
+services:
+  # Express API (in-memory data; free tier sleeps when idle)
+  - type: web
+    name: arali-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /customers
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Must match your static site URL, e.g. https://arali-web.onrender.com
+      - key: CORS_ORIGIN
+        sync: false
+
+  # Vite React build → CDN
+  - type: web
+    name: arali-web
+    runtime: static
+    region: oregon
+    rootDir: client
+    buildCommand: npm install && npm run build
+    # Path is relative to the *repository* root (not rootDir)
+    staticPublishPath: ./client/dist
+    envVars:
+      # Must match your API URL, e.g. https://arali-api.onrender.com (no trailing slash)
+      - key: VITE_API_URL
+        sync: false

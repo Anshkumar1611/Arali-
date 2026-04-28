@@ -231,4 +231,21 @@ Deletes a customer by ID.
 - **Storage** is in-memory (a JavaScript array). All data is lost on server restart. This is intentional for a simple demo — swap in a database for persistence.
 - **Search, sort, and pagination** are all computed client-side from the full list returned by `GET /customers`. The server API is kept minimal.
 - The Vite **dev proxy** (`/api` → backend) avoids CORS issues during local development without any browser configuration.
-# Arali-
+
+---
+
+## Deploy on Render (free Blueprint)
+
+This repo includes [`render.yaml`](render.yaml) at the **repository root**. Render was failing because that file was missing on `main`.
+
+### What to do next
+
+1. **Commit and push** `render.yaml` to the `main` branch of the GitHub repo you connected in Render (`Anshkumar1611/Arali-` or your fork).
+2. In Render: **New → Blueprint**, pick the same repo, branch **main**, blueprint path **`render.yaml`**, then **Apply**.
+3. When Render asks for **synced secrets** (first-time Blueprint flow):
+   - **`CORS_ORIGIN`** (on service `arali-api`): set to your **frontend** URL, e.g. `https://arali-web.onrender.com` (use the exact URL from the static site’s **Settings** page after it exists; if the subdomain differs, use that URL).
+   - **`VITE_API_URL`** (on service `arali-web`): set to your **API** URL, e.g. `https://arali-api.onrender.com` (no trailing slash). This is baked into the static build at build time.
+4. If the static site build ran **before** you had the API URL, open the **`arali-web`** service → **Environment** → set `VITE_API_URL` → **Manual Deploy → Clear build cache & deploy** so Vite rebuilds with the correct API base.
+
+**Note:** Free web services **sleep** after idle time; the first request after sleep is slow, and **in-memory data resets** when the instance restarts.
+
