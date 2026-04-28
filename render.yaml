@@ -24,7 +24,6 @@ services:
   - type: web
     name: arali-web
     runtime: static
-    region: oregon
     rootDir: client
     buildCommand: npm install && npm run build
     # Path is relative to the *repository* root (not rootDir)
