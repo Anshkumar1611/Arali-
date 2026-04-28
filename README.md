@@ -1,0 +1,234 @@
+# Customer Management Dashboard
+
+A full-stack web application for managing customers. Add, view, edit, search, sort, and delete customers through a clean, responsive UI backed by a lightweight Express API.
+
+---
+
+## Features
+
+- **Add / Edit / Delete** customers via a modal form
+- **Debounced live search** — filters by name, email, or phone (300 ms debounce)
+- **Sortable columns** — click any column header to toggle ascending / descending
+- **Pagination** — 10 customers per page with ellipsis-aware page controls
+- **Responsive design** — table on desktop, card list on mobile
+- **Dark mode** — follows the OS color scheme automatically
+- **Toast notifications** — action feedback with auto-dismiss
+- **Form validation** — inline field errors before any network request
+- **Env-driven config** — no hardcoded ports or origins in source files
+
+---
+
+## Tech Stack
+
+| Layer    | Technology                        |
+|----------|-----------------------------------|
+| Frontend | React 19, Vite 8, plain CSS       |
+| Backend  | Node.js 18+, Express 4            |
+| Config   | dotenv (server), Vite env (client)|
+
+---
+
+## Project Structure
+
+```
+Arali/
+├── client/                  React + Vite frontend
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── CustomerModal.jsx   Add / edit modal
+│   │   │   ├── CustomerTable.jsx   Sortable table + mobile cards
+│   │   │   ├── Pagination.jsx      Page controls
+│   │   │   ├── SearchBar.jsx       Debounced search input
+│   │   │   └── Toast.jsx           Notification banner
+│   │   ├── hooks/
+│   │   │   ├── useCustomers.js     CRUD state + API calls
+│   │   │   ├── useDebounce.js      Generic debounce hook
+│   │   │   └── useToast.js         Toast state management
+│   │   ├── utils/
+│   │   │   ├── api.js              Fetch helpers + base URL
+│   │   │   └── validate.js         Form field validation
+│   │   ├── App.jsx                 Root component / orchestrator
+│   │   ├── App.css                 Component styles
+│   │   └── index.css               Global tokens + reset
+│   ├── .env                        Local env (not committed)
+│   ├── .env.example                Env template
+│   └── vite.config.js              Dev proxy config
+│
+├── server/                  Express API
+│   ├── index.js             All routes + in-memory store
+│   ├── .env                 Local env (not committed)
+│   └── .env.example         Env template
+│
+├── package.json             Root: concurrently dev script
+├── .gitignore
+└── README.md
+```
+
+---
+
+## Prerequisites
+
+- **Node.js** >= 18
+- **npm** >= 9
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <repo-url>
+cd Arali
+```
+
+### 2. Install dependencies
+
+```bash
+# Root (concurrently)
+npm install
+
+# Server
+cd server && npm install && cd ..
+
+# Client
+cd client && npm install && cd ..
+```
+
+### 3. Configure environment variables
+
+```bash
+# Server
+cp server/.env.example server/.env
+
+# Client
+cp client/.env.example client/.env
+```
+
+Edit the `.env` files if you need non-default ports or origins (see the Environment Variables section below).
+
+### 4. Start the development servers
+
+```bash
+# From the repo root — starts both servers concurrently
+npm run dev
+```
+
+Or start them separately:
+
+```bash
+# Terminal 1 — backend on http://localhost:3001
+npm run start:server
+
+# Terminal 2 — frontend on http://localhost:5173
+npm run start:client
+```
+
+Open **http://localhost:5173** in your browser.
+
+---
+
+## Available Scripts
+
+### Root
+
+| Script              | Description                                     |
+|---------------------|-------------------------------------------------|
+| `npm run dev`       | Start both server and client concurrently       |
+| `npm run start:server` | Start the Express server only               |
+| `npm run start:client` | Start the Vite dev server only              |
+
+### `server/`
+
+| Script        | Description                              |
+|---------------|------------------------------------------|
+| `npm start`   | Start server (production)                |
+| `npm run dev` | Start server with `--watch` (auto-reload)|
+
+### `client/`
+
+| Script          | Description                        |
+|-----------------|------------------------------------|
+| `npm run dev`   | Start Vite dev server              |
+| `npm run build` | Production build to `dist/`        |
+| `npm run preview` | Preview the production build     |
+| `npm run lint`  | Run ESLint                         |
+
+---
+
+## API Reference
+
+Base URL: `http://localhost:3001`
+
+### GET /customers
+
+Returns all customers.
+
+**Response `200`**
+```json
+[
+  { "id": 1, "name": "Jane Doe", "email": "jane@example.com", "phone": "+1 555 000 0001" }
+]
+```
+
+---
+
+### POST /customers
+
+Creates a new customer.
+
+**Request body**
+```json
+{ "name": "Jane Doe", "email": "jane@example.com", "phone": "+1 555 000 0001" }
+```
+
+**Response `201`** — the created customer object.
+
+---
+
+### PUT /customers/:id
+
+Updates an existing customer. Only the fields present in the body are changed.
+
+**Request body** (all fields optional)
+```json
+{ "name": "Jane Smith", "email": "jane@example.com", "phone": "+1 555 000 0002" }
+```
+
+**Response `200`** — the updated customer object.  
+**Response `404`** — customer not found.
+
+---
+
+### DELETE /customers/:id
+
+Deletes a customer by ID.
+
+**Response `204`** — no content.  
+**Response `404`** — customer not found.
+
+---
+
+## Environment Variables
+
+### `server/.env`
+
+| Variable      | Default                     | Description                     |
+|---------------|-----------------------------|---------------------------------|
+| `PORT`        | `3001`                      | TCP port the Express server binds to |
+| `CORS_ORIGIN` | `http://localhost:5173`     | Allowed CORS origin             |
+
+### `client/.env`
+
+| Variable        | Default | Description                                                                 |
+|-----------------|---------|-----------------------------------------------------------------------------|
+| `VITE_API_URL`  | _(empty)_ | Full backend URL. Leave empty in dev to use the Vite proxy (`/api` → `http://localhost:3001`). Set for production deployments. |
+
+---
+
+## Architecture Notes
+
+- **Storage** is in-memory (a JavaScript array). All data is lost on server restart. This is intentional for a simple demo — swap in a database for persistence.
+- **Search, sort, and pagination** are all computed client-side from the full list returned by `GET /customers`. The server API is kept minimal.
+- The Vite **dev proxy** (`/api` → backend) avoids CORS issues during local development without any browser configuration.
+# Arali-
