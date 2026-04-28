@@ -1,0 +1,12 @@
+{
+  "name": "customer-dashboard",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "start:server": "npm start --prefix server",
+    "start:client": "npm run dev --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

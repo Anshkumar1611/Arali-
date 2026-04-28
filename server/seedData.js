@@ -1,0 +1,23 @@
+/** 20 sample customers for local pagination / search / sort testing. */
+export const SEED_CUSTOMERS = [
+  { name: 'Alice Johnson', email: 'alice.johnson@example.com', phone: '5550101001' },
+  { name: 'Bob Smith', email: 'bob.smith@example.com', phone: '5550101002' },
+  { name: 'Carol Williams', email: 'carol.w@example.com', phone: '5550101003' },
+  { name: 'David Brown', email: 'david.brown@example.com', phone: '5550101004' },
+  { name: 'Eva Martinez', email: 'eva.martinez@example.com', phone: '5550101005' },
+  { name: 'Frank Lee', email: 'frank.lee@example.com', phone: '5550101006' },
+  { name: 'Grace Chen', email: 'grace.chen@example.com', phone: '5550101007' },
+  { name: 'Henry Davis', email: 'henry.davis@example.com', phone: '5550101008' },
+  { name: 'Ivy Taylor', email: 'ivy.taylor@example.com', phone: '5550101009' },
+  { name: 'Jack Wilson', email: 'jack.wilson@example.com', phone: '5550101010' },
+  { name: 'Karen Moore', email: 'karen.moore@example.com', phone: '5550101011' },
+  { name: 'Leo Anderson', email: 'leo.anderson@example.com', phone: '5550101012' },
+  { name: 'Mia Thomas', email: 'mia.thomas@example.com', phone: '5550101013' },
+  { name: 'Noah Jackson', email: 'noah.jackson@example.com', phone: '5550101014' },
+  { name: 'Olivia White', email: 'olivia.white@example.com', phone: '5550101015' },
+  { name: 'Paul Harris', email: 'paul.harris@example.com', phone: '5550101016' },
+  { name: 'Quinn Martin', email: 'quinn.martin@example.com', phone: '5550101017' },
+  { name: 'Rita Garcia', email: 'rita.garcia@example.com', phone: '5550101018' },
+  { name: 'Sam Rodriguez', email: 'sam.rodriguez@example.com', phone: '5550101019' },
+  { name: 'Tina Lewis', email: 'tina.lewis@example.com', phone: '5550101020' },
+]
