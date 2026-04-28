@@ -28,8 +28,8 @@ services:
     # Render sets NODE_ENV=production during install, which skips devDependencies.
     # Vite lives in devDependencies — install with dev packages, then build.
     buildCommand: NPM_CONFIG_PRODUCTION=false npm install && npm run build
-    # Path is relative to the *repository* root (not rootDir)
-    staticPublishPath: ./client/dist
+    # With rootDir: client, publish path is relative to that folder (Vite outputs ./dist)
+    staticPublishPath: ./dist
     envVars:
       # Must match your API URL, e.g. https://arali-api.onrender.com (no trailing slash)
       - key: VITE_API_URL
